@@ -1,0 +1,7 @@
+(ns adv.1
+  (:require [clojure.java.io :as io]))
+
+(defn 1a []
+  (let [input (io/resource "input/1a.txt")]
+    (println input)
+    ))
