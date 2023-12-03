@@ -16,7 +16,7 @@
          turns (map parse-game turns)]
     {:id id :turns turns}))
 
-(defn solve-a []
+(defn solve-a []`
   (let [input (slurp (io/resource "input/2.txt"))
          lines (str/split input #"\n")
          games (map parse-line lines)
@@ -31,3 +31,11 @@
     (apply +
       (map :id
         (remove #(contains? impossible (:id %)) games)))))
+
+(defn solve-b []
+  (let [input (slurp (io/resource "input/2.txt"))
+         lines (str/split input #"\n")
+         games (map parse-line lines)
+         min-cubes (map #(apply merge-with max (:turns %)) games)
+         powers (map #(apply * (vals %)) min-cubes)]
+    (apply + powers)))
