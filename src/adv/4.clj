@@ -20,13 +20,34 @@
   (let [wins (set (:wins card))
          matches (for [m (:mine card)
                        :when (contains? wins m)]
-                  card)]
-    (int
-      (Math/pow 2 (dec (count matches))))))
+                   card)]
+    {:count (count matches)
+      :score (int (Math/pow 2 (dec (count matches))))}))
+
+(defn count-copies [counts card]
+  (let [matches (count-matches card)
+         copies (take (:count matches) (iterate inc (inc (:id card))))]
+    (reduce (fn [counts copy-id]
+              (if (get counts copy-id)
+                (update counts copy-id + (get counts (:id card)))
+                counts))
+      counts
+      copies)))
 
 (defn solve-a []
   (let [input (slurp (io/resource "input/4.txt"))
          lines (str/split input #"\n")
          cards (map parse-card lines)
          matches (map count-matches cards)]
-    (apply + matches)))
+    (apply + (map :score matches))))
+
+(defn solve-b []
+  (let [input (slurp (io/resource "input/4.txt"))
+         lines (str/split input #"\n")
+         cards (map parse-card lines)
+         counts (apply hash-map (interleave
+                                  (map :id cards)
+                                  (repeat 1)))]
+    (->> (reduce count-copies counts cards)
+      vals
+      (apply +))))
