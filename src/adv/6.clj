@@ -4,7 +4,7 @@
 
 (defn as-num [n]
   (try
-    (Integer/parseInt (str n))
+    (Long/parseLong (str n))
     (catch Exception e nil)))
 
 (defn parse [lines]
@@ -22,7 +22,7 @@
     (* hold-time runtime)))
 
 (defn solve-a []
-  (let [input (slurp (io/resource "input/6.txt"))
+  (let [input (slurp (io/resource "input/6b.txt"))
          input (str/split input #"\n")
          races (parse input)]
     (->>
